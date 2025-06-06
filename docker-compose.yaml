@@ -1,0 +1,48 @@
+version: '3.8'
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/Library_Manager?connectTimeout=30000&useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: dbuser
+      SPRING_DATASOURCE_PASSWORD: Userpassword
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_DATASOURCE_HIKARI_CONNECTION_TIMEOUT: 30000
+    networks:
+      - app-network
+
+  db:
+    image: mysql:8.0-oraclelinux8
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: Root@1234
+      MYSQL_DATABASE: Library_Manager
+      MYSQL_USER: dbuser
+      MYSQL_PASSWORD: Userpassword
+    volumes:
+      - ./database/data.sql:/docker-entrypoint-initdb.d/data.sql
+      - ./mysql.cnf:/etc/mysql/conf.d/mysql.cnf
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pRoot@1234"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
