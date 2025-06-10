@@ -15,11 +15,10 @@ services:
       timeout: 10s
       retries: 5
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/Library_Manager?connectTimeout=30000&useSSL=false&allowPublicKeyRetrieval=true
-      SPRING_DATASOURCE_USERNAME: dbuser
-      SPRING_DATASOURCE_PASSWORD: Userpassword
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
-      SPRING_DATASOURCE_HIKARI_CONNECTION_TIMEOUT: 30000
+    - DB_URL=${DB_URL}
+    - DB_USERNAME=${DB_USERNAME}
+    - DB_PASSWORD=${DB_PASSWORD}
+
     networks:
       - app-network
 
@@ -28,10 +27,10 @@ services:
     ports:
       - "3306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: Root@1234
-      MYSQL_DATABASE: Library_Manager
-      MYSQL_USER: dbuser
-      MYSQL_PASSWORD: Userpassword
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     volumes:
       - ./database/data.sql:/docker-entrypoint-initdb.d/data.sql
       - ./mysql.cnf:/etc/mysql/conf.d/mysql.cnf

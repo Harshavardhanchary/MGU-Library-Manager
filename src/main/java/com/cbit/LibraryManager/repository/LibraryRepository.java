@@ -241,9 +241,12 @@ public class LibraryRepository {
     }
 
     public Connection getConnection() throws SQLException {
-        String url = "jdbc:mysql://db:3306/Library_Manager?connectTimeout=30000&useSSL=false&allowPublicKeyRetrieval=true";
-        String username = "dbuser";
-        String password = "Userpassword";
+        String url = System.getenv("DB_URL");
+        String username = System.getenv("DB_USERNAME");
+        String password = System.getenv("DB_PASSWORD");
+        if (url == null || username == null || password == null) {
+            throw new SQLException("Database connection details are not set in environment variables.");
+        }
         int maxRetries = 5;
         int retryDelayMs = 5000; // 5 seconds
 
