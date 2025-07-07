@@ -35,7 +35,7 @@ services:
       - ./database/data.sql:/docker-entrypoint-initdb.d/data.sql
       - ./mysql.cnf:/etc/mysql/conf.d/mysql.cnf
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pRoot@1234"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
       interval: 10s
       timeout: 5s
       retries: 10
