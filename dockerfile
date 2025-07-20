@@ -12,6 +12,6 @@ COPY --from=build /app/target/LibraryManager-0.0.1-SNAPSHOT.war app.war
 # Required for Docker healthcheck
 RUN apt-get update && apt-get install -y curl
 
-EXPOSE 8080
+EXPOSE 8081
 ENTRYPOINT ["java", "-jar", "app.war"]
 
